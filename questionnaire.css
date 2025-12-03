@@ -1,0 +1,209 @@
+/* --- NOUVEAU CSS : Affichage séquentiel des questions --- */
+
+/* Style du conteneur du formulaire */
+.form-container {
+    max-width: 800px; /* Plus large pour l'affichage long */
+    margin: 50px auto;
+    padding: 0; 
+    background-color: transparent; 
+    box-shadow: none;
+}
+
+/* Cache toutes les étapes SAUF l'étape 1 par défaut */
+.step {
+    display: none; /* Masque toutes les étapes sauf celles que le JS activera */
+    text-align: left;
+    padding: 30px;
+    margin-bottom: 20px;
+    transition: all 0.4s ease-in-out;
+}
+
+/* Style de l'étape non active (complétée) */
+.step.completed {
+    display: block; /* Affiche l'étape complétée */
+    background-color: var(--background-card);
+    border-left: 5px solid var(--primary-color); /* Bande bleue pour montrer la progression */
+    opacity: 0.6; /* Estomper l'étape complétée */
+    box-shadow: none;
+}
+
+/* Style de l'étape active (en cours de remplissage) */
+.step.active-step {
+    display: block; /* Affiche l'étape active */
+    opacity: 1; /* Pleine visibilité */
+    background-color: var(--background-card);
+    border: 1px solid var(--cta-color); /* Bordure colorée pour attirer l'attention */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Ombre pour la faire ressortir */
+    border-radius: 8px;
+}
+
+/* Cache les boutons de navigation des étapes complétées */
+.step.completed .navigation-buttons,
+.step.completed .next-btn {
+    display: none !important;
+}
+
+/* Bouton CONTINUER masqué par défaut dans les questions à choix */
+.step.active-step .next-btn.auto-show {
+    display: none;
+}
+
+/* Style des titres et des sous-sections */
+.form-container h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Style des champs de formulaire */
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="number"], 
+input[type="email"],
+select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+/* Boutons de navigation */
+.navigation-buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Style pour le bouton Précédent */
+.secondary-btn {
+    background-color: #ccc;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+}
+
+.secondary-btn:hover {
+    background-color: #bbb;
+}
+
+/* Style de la Barre de Progression */
+.progress-bar {
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 0%; 
+    background-color: var(--cta-color);
+    transition: width 0.4s ease-in-out;
+}
+
+/* --- Styles spécifiques aux OPTIONS CARTES (similaires LesFurets) --- */
+
+.card-group {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 15px; 
+    justify-content: flex-start; 
+    margin-top: 20px;
+}
+
+.option-card {
+    flex: 1 1 45%; 
+    text-align: center;
+    padding: 15px 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: var(--background-card); 
+    font-weight: bold;
+    color: var(--text-light);
+    position: relative;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+/* Masquer le bouton radio/checkbox natif */
+.option-card input[type="radio"],
+.option-card input[type="checkbox"] {
+    position: absolute; 
+    opacity: 0; 
+    pointer-events: none; 
+}
+
+/* Effet au survol de la carte */
+.option-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(var(--primary-color), 0.3);
+}
+
+/* CORRECTION CLÉ : Appliquer les styles au label parent lorsque l'input enfant est coché */
+.option-card input:checked {
+    /* Style de l'input lui-même (non visible) */
+}
+
+/* Style de la carte sélectionnée/cochée (appliqué au label) */
+.option-card input:checked + span,
+.option-card input:checked ~ span {
+    color: white; 
+}
+
+/* Appliquer le style au LABEL parent lorsque l'input est coché */
+.option-card input:checked + span {
+    /* Nous n'avons pas besoin de ça car le style est appliqué au label entier */
+}
+
+.option-card input:checked {
+    /* Règle CSS pour cibler le label parent de l'input coché, qui était le problème */
+    /* La solution propre en CSS est d'appliquer le style au label via le sélecteur d'attribut, 
+       mais puisque l'input est à l'intérieur du label, nous devons cibler le label via la pseudo-classe :has(), 
+       qui n'est pas encore universellement supportée. */
+}
+
+/* Solution utilisant la carte comme cible visuelle (via la structure : input + span) */
+.option-card input[type="radio"]:checked {
+    /* Nous ne pouvons pas styliser le parent, nous stylisons donc la carte */
+}
+
+/* Règle de style corrigée : cibler l'option-card elle-même lorsque l'input est coché */
+.option-card input:checked + span {
+    /* Cette règle ne suffit pas, car elle ne cible que le SPAN. */
+}
+
+/* On utilise le sélecteur général pour appliquer le style au label */
+/* Le sélecteur 'input:checked' doit être au niveau du label (parent) mais ce n'est pas possible directement.
+   Nous allons utiliser la meilleure solution disponible : appliquer le style directement au label. */
+.option-card:has(input:checked) {
+    background-color: var(--cta-color) !important;
+    border-color: var(--cta-color) !important;
+}
+
+/* Rendre le texte du span blanc lorsque l'input est coché */
+.option-card:has(input:checked) span {
+    color: white !important;
+}
+
+/* Afficher le bouton de navigation */
+.step.active-step .next-btn.auto-show.show {
+    display: inline-block;
+}
+
+/* Les règles désactivées sont retirées. */
