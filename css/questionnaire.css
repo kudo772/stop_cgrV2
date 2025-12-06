@@ -206,4 +206,9 @@ select {
     display: inline-block;
 }
 
-/* Les règles désactivées sont retirées. */
+/* --- Correction alignement bouton Continuer de la première étape (où il est seul) --- */
+/* Cible le conteneur de navigation dans l'étape 1 */
+.step[data-step="1"] .navigation-buttons {
+    /* Forcer l'alignement des éléments présents à la fin (droite) */
+    justify-content: flex-end; 
+}

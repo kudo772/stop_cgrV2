@@ -3,315 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questionnaire - STOP CIGARETTE</title>
+    <title>Évaluation Personnalisée</title>
     <link rel="stylesheet" href="css/styles.css"> 
-    <link rel="stylesheet" href="css/questionnaire.css">
+    <link rel="stylesheet" href="css/questionnaire.css"> 
 </head>
+
 <body>
     <header>
-        <h1>Mon Évaluation STOP CIGARETTE</h1>
-        <button id="theme-toggle">Mode Sombre 🌙</button> 
-        <p>Question <span id="current-step-display">1</span></p> 
+    <h1>Mon Évaluation STOP CIGARETTE</h1>
+    <button id="theme-toggle">Mode Sombre 🌙</button> 
     </header>
 
-    <main>
-        <div class="form-container">
+    <div class="hero">
+        
+        <div class="progress-bar">
+            <div id="progress-indicator"></div>
+        </div>
+        <div class="step-counter">
+            <span id="current-step-display">1 sur 18</span>
+        </div>
+
+        <form id="quitting-form">
             
-            <div class="progress-bar">
-                <div class="progress" id="progress-indicator"></div>
+            <div class="step" data-step="1">
+                <h2>Depuis combien de temps fumez-vous ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="duree_fume" value="moins_1an" required> <span>Moins d'un an</span></label>
+                    <label class="option-card"><input type="radio" name="duree_fume" value="1_a_5_ans"> <span>Entre 1 et 5 ans</span></label>
+                    <label class="option-card"><input type="radio" name="duree_fume" value="plus_5_ans"> <span>Plus de 5 ans</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
             </div>
 
-            <form id="quitting-form">
+            <div class="step" data-step="2">
+                <h2>Combien de cigarettes fumez-vous par jour en moyenne ?</h2>
+                    <label for="cigs_par_jour_input">Entrez un nombre (entre 1 et 50)</label>
+                    <input 
+                        type="number" 
+                        id="cigs_par_jour_input" 
+                        name="cigs_par_jour" 
+                        min="1" 
+                        max="50" 
+                        placeholder="Ex: 10" 
+                        required
+                        class="input-numeric-center">
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn cta-button">Continuer</button> 
+                </div>
+            </div>
+
+            <div class="step" data-step="3">
+                <h2>Est-ce que votre consommation augmente significativement lors de situations spécifiques (stress, week-end, soirées) ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="variation_conso" value="oui" required> <span>Oui</span></label>
+                    <label class="option-card"><input type="radio" name="variation_conso" value="non"> <span>Non</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
+            </div>
+
+            <div class="step" data-step="4">
+                <h2>Quel est votre type de consommation habituel ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="type_conso" value="industrielles" required> <span>Cigarettes industrielles</span></label>
+                    <label class="option-card"><input type="radio" name="type_conso" value="roulees"> <span>Cigarettes roulées</span></label>
+                    <label class="option-card"><input type="radio" name="type_conso" value="electronique"> <span>Cigarette électronique</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
+            </div>
+
+            <div class="step" data-step="5">
+                <h2>À quel moment de la journée fumez-vous le plus ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="pic_conso" value="matin" required> <span>Matin</span></label>
+                    <label class="option-card"><input type="radio" name="pic_conso" value="apres_midi"> <span>Après-midi</span></label>
+                    <label class="option-card"><input type="radio" name="pic_conso" value="soir"> <span>Soir</span></label>
+                    <label class="option-card"><input type="radio" name="pic_conso" value="avant_dormir"> <span>Juste avant de dormir</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
+            </div>
+
+            <div class="step" data-step="6">
+                <h2>Pourquoi fumez-vous principalement ?</h2>
+                <select name="raison_principale" required>
+                    <option value="">-- Sélectionner une raison --</option>
+                    <option value="habitude">Habitude</option>
+                    <option value="gestion_stress">Gestion du stress</option>
+                    <option value="pression_sociale">Pression sociale</option>
+                    <option value="plaisir">Plaisir</option>
+                    <option value="difficulte_arret">Difficulté à arrêter</option>
+                </select>
                 
-                <div class="step active-step" data-step="1">
-                    <h2>Depuis combien de temps fumez-vous ? (en années)</h2>
-                    <input type="number" id="temps_fume" name="temps_fume" min="0" required>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn cta-button">Continuer</button> 
+                </div>
+            </div>
+            
+            <div class="step" data-step="7">
+                <h2>Sur une échelle de 1 à 10, quelle est votre motivation pour arrêter de fumer ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="motivation_arret" value="1_3" required> <span>1 à 3 (Motivation faible)</span></label>
+                    <label class="option-card"><input type="radio" name="motivation_arret" value="4_6"> <span>4 à 6 (Motivation moyenne)</span></label>
+                    <label class="option-card"><input type="radio" name="motivation_arret" value="7_8"> <span>7 à 8 (Motivation élevée)</span></label>
+                    <label class="option-card"><input type="radio" name="motivation_arret" value="9_10"> <span>9 à 10 (Motivation très forte)</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
+            </div>
+
+            <div class="step" data-step="8">
+                <h2>Qu’est-ce qui vous freine le plus dans l’arrêt du tabac ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="frein_arret" value="manque" required> <span>Peur du manque (symptômes physiques)</span></label>
+                    <label class="option-card"><input type="radio" name="frein_arret" value="stress"> <span>Stress et gestion des émotions</span></label>
+                    <label class="option-card"><input type="radio" name="frein_arret" value="poids"> <span>Prise de poids</span></label>
+                    <label class="option-card"><input type="radio" name="frein_arret" value="echec"> <span>Crainte d’échouer / Perte de plaisir</span></label>
+                    <label class="option-card"><input type="radio" name="frein_arret" value="soutien"> <span>Manque de soutien de l'entourage</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
+            </div>
+
+            <div class="step" data-step="9">
+                <h2>Avez-vous des symptômes liés au tabac ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="symptomes" value="toux" required> <span>Toux</span></label>
+                    <label class="option-card"><input type="radio" name="symptomes" value="essoufflement"> <span>Essoufflement</span></label>
+                    <label class="option-card"><input type="radio" name="symptomes" value="maux_gorge"> <span>Maux de gorge fréquents</span></label>
+                    <label class="option-card"><input type="radio" name="symptomes" value="difficulte_sport"> <span>Difficulté à faire du sport</span></label>
+                    <label class="option-card"><input type="radio" name="symptomes" value="aucun"> <span>Aucun</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
+            </div>
+
+            <div class="step" data-step="10">
+                <h2>Fumez-vous à l’intérieur de votre domicile ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="fume_interieur" value="oui" required> <span>Oui</span></label>
+                    <label class="option-card"><input type="radio" name="fume_interieur" value="non"> <span>Non</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
+            </div>
+
+            <div class="step" data-step="11">
+                <h2>D’autres personnes autour de vous sont-elles exposées à votre fumée ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="exposition_entourage" value="oui" required> <span>Oui (enfants, conjoint(e), collègues…)</span></label>
+                    <label class="option-card"><input type="radio" name="exposition_entourage" value="non"> <span>Non</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
+                </div>
+            </div>
+
+            <div class="step" data-step="12">
+                <h2>Combien de fois avez-vous déjà essayé d'arrêter de fumer ?</h2>
+                <select name="tentatives_arret" required>
+                    <option value="">-- Sélectionner --</option>
+                    <option value="0">Jamais</option>
+                    <option value="1">1 seule fois</option>
+                    <option value="2+">2 fois ou plus</option>
+                </select>
+                
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn cta-button">Continuer</button> 
+                </div>
+            </div>
+            
+            <div class="step" data-step="13">
+                <h2>Avez-vous déjà testé une ou plusieurs de ces méthodes ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="checkbox" name="methode_substituts" value="oui"> <span>Substituts nicotiniques (patchs, gommes, etc.)</span></label>
+                    <label class="option-card"><input type="checkbox" name="methode_medical" value="oui"> <span>Accompagnement médical ou psychologique</span></label>
+                    <label class="option-card"><input type="checkbox" name="methode_appli" value="oui"> <span>Application / programme d’arrêt</span></label>
+                    <label class="option-card"><input type="checkbox" name="methode_seul" value="oui"> <span>Sevrage seul (sans aide)</span></label>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
                     <button type="button" class="next-btn cta-button">Continuer</button>
                 </div>
+            </div>
 
-                <div class="step" data-step="2">
-                    <h2>Combien de cigarettes fumez-vous par jour ?</h2>
-                    <input type="number" id="cigs_par_jour" name="cigs_par_jour" min="1" required>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
+            <div class="step" data-step="14">
+                <h2>Quel type d’aide vous conviendrait pour vous aider à arrêter de fumer ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="checkbox" name="aide_medical" value="oui"> <span>Suivi médical</span></label>
+                    <label class="option-card"><input type="checkbox" name="aide_coaching" value="oui"> <span>Coaching / soutien psychologique</span></label>
+                    <label class="option-card"><input type="checkbox" name="aide_groupe" value="oui"> <span>Groupe de soutien</span></label>
+                    <label class="option-card"><input type="checkbox" name="aide_medicaments" value="oui"> <span>Aides médicamenteuses (substituts, traitements)</span></label>
+                    <label class="option-card"><input type="checkbox" name="aide_infos" value="oui"> <span>Informations / conseils (articles, lectures)</span></label>
                 </div>
-
-                <div class="step" data-step="3">
-                    <h2>Votre consommation varie-t-elle selon les jours (stress, week-end, soirées…) ?</h2>
-                    <div class="option-group card-group" data-type="radio">
-                        <label class="option-card">
-                            <input type="radio" name="variation_conso" value="oui" required>
-                            <span>Oui</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="variation_conso" value="non">
-                            <span>Non</span>
-                        </label>
-                    </div>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button auto-show">Continuer</button>
-                    </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn cta-button">Continuer</button>
                 </div>
+            </div>
 
-                <div class="step" data-step="4">
-                    <h2>Quel type de cigarette préférez-vous ?</h2>
-                    <div class="option-group card-group" data-type="radio">
-                        <label class="option-card">
-                            <input type="radio" name="preference" value="industrielles" required> 
-                            <span>Cigarettes industrielles</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="preference" value="roulees"> 
-                            <span>Cigarettes roulées</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="preference" value="electronique"> 
-                            <span>Cigarette électronique</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="preference" value="autre"> 
-                            <span>Autre</span>
-                        </label>
-                    </div>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button auto-show">Continuer</button>
-                    </div>
+            <div class="step" data-step="15">
+                <h2>Parmi les propositions suivantes, laquelle est votre plus grande crainte face à l'arrêt ?</h2>
+                <select name="crainte_arret_principale" required>
+                    <option value="">-- Sélectionner --</option>
+                    <option value="poids">Prise de poids</option>
+                    <option value="stress">Augmentation du stress / Nervosité</option>
+                    <option value="echec">Échouer à nouveau / Ne pas y arriver</option>
+                    <option value="social">Isolement social / Perte de plaisir</option>
+                    <option value="aucune">Je n'ai pas de crainte particulière</option>
+                </select>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn cta-button">Continuer</button>
                 </div>
+            </div>
 
-                <div class="step" data-step="5">
-                    <h2>À quel moment de la journée fumez-vous le plus ?</h2>
-                    <select name="moment_plus_fume" required>
-                        <option value="">-- Sélectionner --</option>
-                        <option value="reveil">Au réveil</option>
-                        <option value="matin">Matin</option>
-                        <option value="apres_midi">Après-midi</option>
-                        <option value="soir">Soir</option>
-                        <option value="avant_dormir">Pas de moment particulier</option>
-                    </select>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
+            <div class="step" data-step="16">
+                <h2>Quel serait votre objectif principal dans les 3 prochains mois ?</h2>
+                <div class="radio-group">
+                    <label class="option-card"><input type="radio" name="objectif_3mois" value="reduire" required> <span>Réduire le nombre de cigarettes</span></label>
+                    <label class="option-card"><input type="radio" name="objectif_3mois" value="arreter"> <span>Arrêter complètement</span></label>
+                    <label class="option-card"><input type="radio" name="objectif_3mois" value="stabiliser"> <span>Stabiliser la consommation</span></label>
+                    <label class="option-card"><input type="radio" name="objectif_3mois" value="aucun"> <span>Pas d’objectif défini pour l'instant</span></label>
                 </div>
-
-                <div class="step" data-step="6">
-                    <h2>Pourquoi fumez-vous principalement ?</h2>
-                    <select name="raison_principale" required>
-                        <option value="">-- Sélectionner --</option>
-                        <option value="habitude">Habitude</option>
-                        <option value="stress">Gestion du stress</option>
-                        <option value="social">Pression sociale</option>
-                        <option value="plaisir">Plaisir</option>
-                        <option value="difficulte">Difficulté à arrêter</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn auto-show cta-button">Continuer</button>
                 </div>
+            </div>
 
-                <div class="step" data-step="7">
-                    <h2>Avez-vous déjà envisagé d’arrêter de fumer ?</h2>
-                    <div class="option-group card-group" data-type="radio">
-                        <label class="option-card">
-                            <input type="radio" name="envisage_arret" value="oui" required>
-                            <span>Oui</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="envisage_arret" value="non">
-                            <span>Non</span>
-                        </label>
-                    </div>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button auto-show">Continuer</button>
-                    </div>
+            <div class="step" data-step="17">
+                <h2>À quelle date aimeriez-vous arrêter de fumer ?</h2>
+                <label for="date_arret_input">Choisissez votre objectif de date (même approximatif) :</label>
+                <input 
+                    type="date" 
+                    id="date_arret_input" 
+                    name="date_arret" 
+                    required
+                    class="input-date-center"
+                >
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="button" class="next-btn cta-button">Continuer</button> 
                 </div>
+            </div>
 
-                <div class="step" data-step="8">
-                    <h2>Sur une échelle de 1 à 10, quelle est votre motivation actuelle pour arrêter ?</h2>
-                    <input type="number" id="motivation_echelle" name="motivation_echelle" min="1" max="10" required>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
+            <div class="step" data-step="18">
+                <h2>Dernière étape ! Recevez votre profil personnalisé.</h2>
+
+                <label for="email_input">Entrez votre adresse email :</label>
+                <input 
+                    type="email" 
+                    id="email_input" 
+                    name="email" 
+                    placeholder="votre.email@exemple.com" 
+                    required
+                >
+
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn secondary-btn">Précédent</button>
+                    <button type="submit" class="cta-button">Découvrir mon profil !</button>
                 </div>
+            </div>
 
-                <div class="step" data-step="9">
-                    <h2>Qu’est-ce qui vous freine le plus dans l’arrêt du tabac ?</h2>
-                    <select name="frein_arret" required>
-                        <option value="">-- Sélectionner --</option>
-                        <option value="manque">Peur du manque</option>
-                        <option value="stress">Stress</option>
-                        <option value="poids">Poids</option>
-                        <option value="echec">Crainte d’échouer</option>
-                        <option value="soutien">Manque de soutien</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step" data-step="10">
-                    <h2>Avez-vous des symptômes liés au tabac ? (Sélectionnez le principal ou "Aucun")</h2>
-                    <select name="symptomes_tabac" required>
-                        <option value="">-- Sélectionner --</option>
-                        <option value="toux">Toux</option>
-                        <option value="essoufflement">Essoufflement</option>
-                        <option value="maux_gorge">Maux de gorge fréquents</option>
-                        <option value="difficulte_sport">Difficulté à faire du sport</option>
-                        <option value="aucun">Aucun</option>
-                    </select>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step" data-step="11">
-                    <h2>Fumez-vous à l’intérieur de votre domicile ?</h2>
-                    <div class="option-group card-group" data-type="radio">
-                        <label class="option-card">
-                            <input type="radio" name="fume_domicile" value="oui" required>
-                            <span>Oui</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="fume_domicile" value="non">
-                            <span>Non</span>
-                        </label>
-                    </div>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button auto-show">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step" data-step="12">
-                    <h2>D’autres personnes autour de vous sont-elles exposées à votre fumée ?</h2>
-                    <div class="option-group card-group" data-type="radio">
-                        <label class="option-card">
-                            <input type="radio" name="exposition_autrui" value="oui" required>
-                            <span>Oui (enfants, conjoint(e), collègues…)</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="exposition_autrui" value="non">
-                            <span>Non</span>
-                        </label>
-                    </div>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button auto-show">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step" data-step="13">
-                    <h2>Avez-vous déjà essayé d’arrêter de fumer ?</h2>
-                    <div class="option-group card-group" data-type="radio" data-control-target="14,15">
-                        <label class="option-card">
-                            <input type="radio" name="deja_essaye_arret" value="oui" required>
-                            <span>Oui</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="deja_essaye_arret" value="non">
-                            <span>Non</span>
-                        </label>
-                    </div>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button auto-show">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step conditional-step" data-step="14" data-parent-question="deja_essaye_arret" data-parent-value="oui">
-                    <h2>Si oui, combien de fois ?</h2>
-                    <input type="number" id="nb_tentatives" name="nb_tentatives" min="1" required>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step conditional-step" data-step="15" data-parent-question="deja_essaye_arret" data-parent-value="oui">
-                    <h2>Quelles méthodes avez-vous déjà testées ?</h2>
-                    <select name="methodes_testees" required>
-                        <option value="">-- Sélectionner --</option>
-                        <option value="substituts">Substituts nicotiniques</option>
-                        <option value="medical">Accompagnement médical</option>
-                        <option value="application">Application / programme d’arrêt</option>
-                        <option value="seul">Sevrage seul</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step" data-step="16">
-                    <h2>Souhaiteriez-vous être aidé pour réduire ou arrêter ?</h2>
-                    <div class="option-group card-group" data-type="radio" data-control-target="17">
-                        <label class="option-card">
-                            <input type="radio" name="souhait_aide" value="oui" required>
-                            <span>Oui</span>
-                        </label>
-                        <label class="option-card">
-                            <input type="radio" name="souhait_aide" value="non">
-                            <span>Non</span>
-                        </label>
-                    </div>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button auto-show">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step conditional-step" data-step="17" data-parent-question="souhait_aide" data-parent-value="oui">
-                    <h2>Quel type d’aide vous conviendrait ?</h2>
-                    <select name="type_aide_souhaitee" required>
-                        <option value="">-- Sélectionner --</option>
-                        <option value="medical">Suivi médical</option>
-                        <option value="coaching">Coaching / soutien psychologique</option>
-                        <option value="groupe">Groupe de soutien</option>
-                        <option value="medicamenteuses">Aides médicamenteuses</option>
-                        <option value="informations">Informations / conseils</option>
-                    </select>
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="button" class="next-btn cta-button">Continuer</button>
-                    </div>
-                </div>
-
-                <div class="step" data-step="18">
-                    <h2>Quel serait votre objectif dans les 3 prochains mois ?</h2>
-                    <select name="objectif_3mois" required>
-                        <option value="">-- Sélectionner --</option>
-                        <option value="reduire">Réduire le nombre de cigarettes</option>
-                        <option value="arreter">Arrêter complètement</option>
-                        <option value="stabiliser">Stabiliser la consommation</option>
-                        <option value="aucun">Pas d’objectif</option>
-                    </select>
-                    
-                    <h3 style="margin-top: 40px;">Recevez votre profil personnalisé par email :</h3>
-                    <input type="email" id="user-email" name="email" placeholder="Votre adresse email" required>
-
-                    <div class="navigation-buttons">
-                        <button type="button" class="prev-btn secondary-btn">Précédent</button>
-                        <button type="submit" class="cta-button final-submit">Obtenir mon plan gratuit</button>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-    </main>
-    
-    <script src="js/script.js"></script>
+        </form>
+    </div>
+    <script src="js/script.js"></script> 
     <script src="js/questionnaire.js"></script>
+
 </body>
 </html>

@@ -1,126 +1,163 @@
-// questionnaire.js
+// js/questionnaire.js - Version 1.0 (Corrigée et Complète pour 18 étapes)
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('quitting-form');
-    const allSteps = Array.from(form.querySelectorAll('.step'));
+    // Sélecteur mis à jour pour récupérer correctement toutes les étapes
+    const allSteps = Array.from(form.querySelectorAll('.step')); 
     const progressIndicator = document.getElementById('progress-indicator');
     const stepDisplay = document.getElementById('current-step-display');
-    const totalStepsInForm = 18;
+    // Le bouton submit doit être dans le HTML, ici on le cherche juste pour la dernière étape
+    const submitButton = form.querySelector('button[type="submit"]'); 
+
+    const TOTAL_STEPS = allSteps.length;
+    let currentStepIndex = 0; // Index du tableau (0 à 17 pour 18 étapes)
+
+
+    // --- LOGIQUE DE PROFILAGE ET REDIRECTION ---
+    // --- LOGIQUE DE PROFILAGE ET REDIRECTION (UNIQUEMENT QTE) ---
+function determineProfileAndRedirect(answers) {
+    // Collecte uniquement la réponse pertinente
+    const cigsPerDay = parseInt(answers.cigs_par_jour) || 0;
     
-    // Contient uniquement les étapes visibles/actives
-    let visibleSteps = []; 
-    let currentStepIndex = 0; // Index dans le tableau visibleSteps
+    let targetPage = '';
 
-    // --- 1. FONCTIONS UTILITAIRES DE GESTION DES ÉTAPES VISIBLES ---
+    // Détermination du profil basé SEULEMENT sur la quantité, avec les seuils 5 et 12
+    if (cigsPerDay >= 13) {
+        // 13 cigarettes ou plus
+        targetPage = 'grosfumeur.html';
+        
+    } else if (cigsPerDay >= 6) {
+        // Entre 6 et 12 cigarettes
+        targetPage = 'moyenfumeur.html';
+        
+    } else {
+        // 5 cigarettes ou moins
+        targetPage = 'petitfumeur.html';
+    }
+    
+    // Log des données (essentiel pour l'envoi au propriétaire du site)
+    console.log("Quantité de cigarettes par jour : " + cigsPerDay);
+    console.log("Redirection basée uniquement sur la quantité vers : " + targetPage);
 
-    // Met à jour le tableau 'visibleSteps' en tenant compte des conditions
-    function updateVisibleSteps() {
-        visibleSteps = allSteps.filter(step => {
-            if (step.classList.contains('conditional-step')) {
-                const parentName = step.dataset.parentQuestion;
-                const requiredValue = step.dataset.parentValue;
-                
-                // Vérifie si la réponse à la question parente correspond
-                const parentInput = form.querySelector(`input[name="${parentName}"]:checked`);
-                return parentInput && parentInput.value === requiredValue;
-            }
-            // Inclut toutes les étapes non conditionnelles
-            return true;
-        });
+    // Redirection finale
+    window.location.href = targetPage;
+}
 
-        // S'assurer que l'index actuel ne dépasse pas la nouvelle taille du tableau
-        if (currentStepIndex >= visibleSteps.length) {
-            currentStepIndex = visibleSteps.length - 1;
-        }
-        if (currentStepIndex < 0) currentStepIndex = 0;
+
+    // --- 1. FONCTIONS UTILITAIRES ---
+
+    function checkIfLastStep() {
+        return currentStepIndex === TOTAL_STEPS - 1;
     }
 
-    // Fonction pour valider l'étape active
     function validateStep(stepElement) {
         let isValid = true;
         
-        // 1. Validation des champs requis (sauf radios et checkboxes)
-        const requiredInputs = stepElement.querySelectorAll('input[required], select[required]');
+        // Cacher les messages d'erreur précédents
+        stepElement.querySelectorAll('[required]').forEach(input => {
+            input.style.border = ''; 
+        });
+
+        // Validation des champs requis (text, number, email, date, select)
+        const requiredInputs = stepElement.querySelectorAll('[required]');
         
         requiredInputs.forEach(input => {
-            if (input.type !== 'radio' && input.type !== 'checkbox' && !input.value) {
+            if (input.type === 'radio' || input.type === 'checkbox') return;
+            if (!input.value) {
                 isValid = false;
                 input.style.border = '2px solid red';
-            } else if (input.type !== 'radio' && input.type !== 'checkbox') {
-                input.style.border = ''; 
             }
         });
         
-        // 2. Validation spécifique pour les groupes de Radio
+        // Validation spécifique pour les groupes de Radio et Select
         const radioGroups = stepElement.querySelectorAll('input[type="radio"][required]');
         if (radioGroups.length > 0) {
-            // Un seul groupe de radio est généralement requis par étape
             const groupName = radioGroups[0].name;
             const checkedRadio = stepElement.querySelector(`input[name="${groupName}"]:checked`);
             if (!checkedRadio) {
                 isValid = false;
             }
         }
-
+        
+        // Validation spécifique pour les Select (option par défaut avec value="")
+        const selectFields = stepElement.querySelectorAll('select[required]');
+        selectFields.forEach(select => {
+            if (!select.value) {
+                isValid = false;
+                select.style.border = '2px solid red';
+            }
+        });
+        
         return isValid;
     }
 
-    // Fonction pour mettre à jour l'affichage de l'étape et la barre de progression
+
     function updateStepsDisplay() {
-        // 1. Mettre à jour la liste des étapes visibles en fonction des réponses conditionnelles
-        updateVisibleSteps(); 
+        const currentStepElement = allSteps[currentStepIndex];
 
-        const currentStepElement = visibleSteps[currentStepIndex];
-        
-        allSteps.forEach(step => {
+        // Masquer toutes les étapes et marquer celles qui sont complétées
+        allSteps.forEach((step, index) => {
             step.classList.remove('active-step', 'completed');
-            step.style.display = 'none';
-
-            // Afficher les étapes déjà complétées (toutes celles avant l'étape active)
-            const stepIndexInVisible = visibleSteps.indexOf(step);
-            if (stepIndexInVisible >= 0 && stepIndexInVisible < currentStepIndex) {
-                 step.classList.add('completed');
-                 step.style.display = 'block';
+            if (index < currentStepIndex) {
+                step.classList.add('completed');
             }
         });
 
         if (currentStepElement) {
-            // Afficher l'étape active
-            currentStepElement.classList.add('active-step');
-            currentStepElement.style.display = 'block';
+            // 💡 AFFICHAGE : Active l'étape courante
+            currentStepElement.classList.add('active-step'); 
             
-            // Défilement automatique vers l'étape active
+            // Fait défiler jusqu'à l'étape active 
             currentStepElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-            // Gérer l'affichage du bouton auto-show (pour les cartes radio)
+            // Gérer l'affichage des boutons Continuer (auto-show)
             const nextBtn = currentStepElement.querySelector('.next-btn.auto-show');
-            if (nextBtn) {
-                 const checkedInput = currentStepElement.querySelector('input[type="radio"]:checked');
-                 nextBtn.style.display = checkedInput ? 'inline-block' : 'none';
+            const manualNextBtn = currentStepElement.querySelector('.next-btn:not(.auto-show)');
+
+            // Masquer les boutons submit/next/manual
+            if (submitButton) submitButton.style.display = 'none'; 
+            if (nextBtn) nextBtn.style.display = 'none';
+            if (manualNextBtn) manualNextBtn.style.display = 'inline-block'; // Par défaut pour les étapes non radio/checkbox
+
+            
+            if (checkIfLastStep()) {
+                // ÉTAPE 18 (FINALE) : Afficher le bouton de Soumission
+                if(nextBtn) nextBtn.style.display = 'none'; 
+                if(manualNextBtn) manualNextBtn.style.display = 'none';
+                if (submitButton) submitButton.style.display = 'inline-block';
+            } else {
+                // Étapes intermédiaires
+                if (nextBtn) {
+                    // 🚨 CORRECTION n°1 : Afficher le bouton par défaut sur l'étape 1 (où rien n'est coché)
+                    if (currentStepIndex === 0) {
+                         nextBtn.style.display = 'inline-block';
+                    } else {
+                        // Logique standard d'affichage automatique pour les étapes radio suivantes
+                        const checkedInput = currentStepElement.querySelector('input[type="radio"]:checked');
+                        nextBtn.style.display = checkedInput ? 'inline-block' : 'none';
+                    }
+                }
             }
         }
 
-
-        // 2. Mettre à jour la barre de progression et le compteur
-        const progressPercent = (currentStepIndex + 1) / visibleSteps.length * 100;
+        // Mettre à jour la barre de progression et le compteur
+        const progressPercent = (currentStepIndex) / (TOTAL_STEPS - 1) * 100;
         progressIndicator.style.width = `${progressPercent}%`;
-
-        // Affichage numérique : X sur Y (Y étant le nombre d'étapes visibles)
-        stepDisplay.textContent = `${currentStepIndex + 1} sur ${visibleSteps.length}`;
+        stepDisplay.textContent = `${currentStepIndex + 1} sur ${TOTAL_STEPS}`;
     }
+
 
     // --- 2. GESTION DES ÉVÉNEMENTS ---
 
     // Gère le passage à l'étape suivante (validation et affichage)
     form.addEventListener('click', (event) => {
         if (event.target.classList.contains('next-btn')) {
-            const currentStepElement = visibleSteps[currentStepIndex];
+            const currentStepElement = allSteps[currentStepIndex];
             
+            // Si le bouton 'next-btn' est cliqué manuellement (non auto-show)
             if (validateStep(currentStepElement)) {
-                if (currentStepIndex < visibleSteps.length - 1) {
+                if (currentStepIndex < TOTAL_STEPS - 1) {
                     currentStepIndex++;
-                    // Si on saute des étapes conditionnelles, on met à jour la liste visibleSteps
-                    updateVisibleSteps(); 
                     updateStepsDisplay();
                 }
             }
@@ -132,37 +169,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.classList.contains('prev-btn')) {
             if (currentStepIndex > 0) {
                 currentStepIndex--;
-                // Mise à jour car l'étape précédente pourrait être l'étape de contrôle
-                updateVisibleSteps(); 
                 updateStepsDisplay();
             }
         }
     });
 
-    // Gère l'interaction avec les radios et sélecteurs pour les boutons auto-show et les étapes conditionnelles
+    // Gère les changements (pour afficher les boutons auto-show)
     form.addEventListener('change', (event) => {
         const input = event.target;
         const currentStepElement = input.closest('.step');
         
         if (!currentStepElement) return;
 
-        // 1. Gérer l'affichage du bouton Continuer (pour les radios/cartes)
+        // Si l'input est une radio qui utilise l'auto-show, on recalcule l'affichage
         const nextBtn = currentStepElement.querySelector('.next-btn.auto-show');
         if (input.type === 'radio' && nextBtn) {
-            nextBtn.style.display = 'inline-block';
+             updateStepsDisplay(); 
         } 
-        // 2. Si c'est une question qui contrôle une étape conditionnelle (Q13 ou Q16), recalculer les étapes visibles
-        if (currentStepElement.querySelector('[data-control-target]')) {
-            // Mise à jour car la réponse change le chemin
-            updateVisibleSteps();
-            
-            // Si la réponse change (ex: passe de OUI à NON), on se replace correctement
-            // On s'assure que l'étape active est toujours affichée
-            const newIndex = visibleSteps.indexOf(currentStepElement);
-            if (newIndex !== -1) {
-                currentStepIndex = newIndex;
-            }
-        }
     });
 
 
@@ -170,25 +193,26 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         
-        const finalStepElement = visibleSteps[currentStepIndex];
+        const finalStepElement = allSteps[currentStepIndex];
+
+        if (!checkIfLastStep()) {
+            console.error("Tentative de soumission avant l'étape finale.");
+            return;
+        }
+
         if (validateStep(finalStepElement)) {
             
-            // --- LOGIQUE DE PROFILAGE ET REDIRECTION (PROCHAINE ÉTAPE) ---
+            // Collecte de toutes les réponses
             const formData = new FormData(form);
             const answers = Object.fromEntries(formData.entries());
-            console.log("Réponses soumises :", answers);
-
-            alert('Évaluation terminée. Redirection vers la page de résultats...');
             
-            // Appeler ici la fonction de profilage et de redirection
-            // exemple: determineProfileAndRedirect(answers);
-
-            // Pour l'instant, on redirige juste à titre d'exemple
-            window.location.href = 'index.html'; // Remplacez par la logique de redirection réelle
+            // Détermine le profil et redirige
+            determineProfileAndRedirect(answers);
+        } else {
+            // Affichera les erreurs visuelles grâce à validateStep
         }
     });
 
-    // Initialisation
-    updateVisibleSteps();
+    // Initialisation du questionnaire (pour afficher la première étape)
     updateStepsDisplay();
 });
